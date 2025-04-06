@@ -1,15 +1,28 @@
 services:
   starline:
     build:
-      context: .
+      context: ../docker/php
       dockerfile: Dockerfile
     container_name: starline
     restart: always
+    volumes:
+      - ./index.php:/var/www/html/index.php
+    networks:
+      - starline-network  # Reference the external network
+
+  nginx:
+    image: nginx:latest
+    container_name: starline-nginx
     ports:
-      - "3000:3000"
+      - "3000:80"
+    volumes:
+      - ../docker/ngnix/conf.d/starline-service.conf:/etc/nginx/conf.d/default.conf
+      - ./index.php:/var/www/Starline/public/index.php
+    depends_on:
+      - starline
     networks:
       - starline-network
 
 networks:
   starline-network:
-    external: true
+    external: true  # Define the network as external at the root level

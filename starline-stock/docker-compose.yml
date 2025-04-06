@@ -1,12 +1,14 @@
 services:
   starline-stock:
     build:
-      context: .
+      context: ../../docker/php
       dockerfile: Dockerfile
     container_name: starline-stock
     restart: always
     ports:
-      - "3001:3001"
+      - "3001:80"
+    volumes:
+      - ./index.php:/var/www/html/index.php
     networks:
       - starline-network
 

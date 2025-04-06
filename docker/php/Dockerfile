@@ -6,34 +6,39 @@ WORKDIR /var/www
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
     zip \
     unzip \
     git \
     curl \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql
+    && docker-php-ext-install pdo pdo_mysql
 
-# Install Node.js and npm (using NodeSource repository for latest version)
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
-&& apt-get install -y nodejs
+# Commenting out image processing libraries as they are not required for the current application
+# RUN apt-get update && apt-get install -y \
+#     libpng-dev \
+#     libjpeg-dev \
+#     libfreetype6-dev \
+#     && docker-php-ext-configure gd --with-freetype --with-jpeg \
+#     && docker-php-ext-install gd
 
-# Verify Node.js and npm versions
-RUN node -v && npm -v
+# Commenting out unnecessary parts for the current application
+# RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
+# && apt-get install -y nodejs
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# RUN node -v && npm -v
+
+# COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# RUN mkdir -p /var/www/storage && \
+#     chown -R www-data:www-data /var/www && \
+#     chmod -R 775 /var/www/storage
 
 # Copy existing application directory contents
 COPY . .
 
-# Set permissions
-RUN mkdir -p /var/www/storage && \
-    chown -R www-data:www-data /var/www && \
-    chmod -R 775 /var/www/storage
+# Expose port 3000
+EXPOSE 3000
 
-# Expose port 9000
-EXPOSE 9000
+# Add a health check to ensure the container is running correctly
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD curl -f http://localhost:3000 || exit 1
+
 CMD ["php-fpm"]
