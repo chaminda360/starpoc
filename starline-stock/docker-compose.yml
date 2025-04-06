@@ -1,0 +1,15 @@
+services:
+  starline-stock:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: starline-stock
+    restart: always
+    ports:
+      - "3001:3001"
+    networks:
+      - starline-network
+
+networks:
+  starline-network:
+    external: true
