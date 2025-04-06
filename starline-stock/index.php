@@ -3,7 +3,7 @@
 $host = 'mysql';
 $db = 'starline_stock_db';
 $user = 'root';
-$pass = '';
+$pass = 'root'; // Updated to match the MYSQL_ROOT_PASSWORD in docker-compose.yml
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -18,6 +18,13 @@ try {
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]);
+    exit;
+}
+
+// Handle GET request to the root endpoint
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_SERVER['REQUEST_URI'] === '/') {
+    header('Content-Type: application/json');
+    echo json_encode(['message' => 'Welcome to the Starline Stock service!']);
     exit;
 }
 

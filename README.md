@@ -35,7 +35,7 @@ This project consists of two PHP-based applications: `Starline` and `Starline-St
 - Located in the `Starline/` directory.
 - The `index.php` file contains the application logic, including an endpoint to fetch data from the `users` table in the `starline_service_db` database.
 - The `docker-compose.yml` in the `Starline/` directory sets up the application container using the common `Dockerfile` from `docker/php` and connects it to the `starline-network`.
-- Accessible on port `80`.
+- Accessible on port `3000`.
 
 ### 3. Starline-Stock Application
 - Located in the `starline-stock/` directory.
@@ -83,7 +83,7 @@ This project consists of two PHP-based applications: `Starline` and `Starline-St
    ```
 
 6. **Access the Applications**
-   - Starline: [http://localhost:80](http://localhost:80)
+   - Starline: [http://localhost:3000](http://localhost:3000)
    - Starline-Stock: [http://localhost:3001](http://localhost:3001)
 
 7. **Verify Database Connection**
@@ -115,7 +115,7 @@ If you make changes to the application code, Dockerfiles, or any configuration f
 
 3. **Verify the Applications**
    - Ensure the applications are running by accessing their endpoints:
-     - `Starline`: [http://localhost:80/users](http://localhost:80/users)
+     - `Starline`: [http://localhost:3000/users](http://localhost:3000/users)
      - `Starline-Stock`: [http://localhost:3001/products](http://localhost:3001/products)
 
 4. **Check Logs (Optional)**
@@ -128,7 +128,7 @@ If you make changes to the application code, Dockerfiles, or any configuration f
 
 ### Starline Application
 - **Endpoint to access users**:
-  - URL: `http://localhost:80/users`
+  - URL: `http://localhost:3000/users`
   - Method: `GET`
   - Description: Fetches all data from the `users` table in the `starline_service_db` database.
 
@@ -207,7 +207,7 @@ If you encounter issues while running the project, follow these steps to test an
    Use tools like `curl` or Postman to test the endpoints:
    - For the `Starline` application:
      ```bash
-     curl http://localhost:80/users
+     curl http://localhost:3000/users
      ```
    - For the `Starline-Stock` application:
      ```bash
@@ -230,3 +230,16 @@ If you encounter issues while running the project, follow these steps to test an
 
 8. **Validate Configuration Files**
    Verify the `docker-compose.yml` and Nginx configuration files for errors.
+
+### Updates
+
+- **Nginx Configuration**:
+  - The Nginx configuration files (`starline-service.conf` and `starline-stock.conf`) are mounted as `default.conf` in their respective containers.
+
+- **Root Endpoints**:
+  - `Starline` application: [http://localhost:3000/](http://localhost:3000/)
+  - `Starline-Stock` application: [http://localhost:3001/](http://localhost:3001/)
+
+- **Port Mapping**:
+  - The `Starline` application is accessible on port `3000`.
+  - The `Starline-Stock` application is accessible on port `3001` via Nginx.
